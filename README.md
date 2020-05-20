@@ -1,5 +1,5 @@
 # encore_trucking
-A simple framework-agnostic FiveM trucking script. Players rent a semi-truck and then perform various deliveries ranging from automobile deliveries to PDM, logging deliveries, fuel deliveries, etc.
+A simple framework-agnostic FiveM trucking script built for [Encore RP](http://discord.encorerp.com). Players rent a semi-truck and then perform various deliveries ranging from automobile deliveries to PDM, logging deliveries, fuel deliveries, etc.
 
 ## Installation
 
