@@ -48,7 +48,7 @@ Config.Routes = {
 		Destinations = {
 			vector3(-15.93, -1104.25, 25.67), -- PDM
 			vector3(-810.84, -228.29, 36.21), -- Luxury Autos
-			vector3(-868.27, -915.56, 25.03), -- Maibatsu Motors Factory
+			vector3(868.27, -915.56, 25.03), -- Maibatsu Motors Factory
 		}
 	},
 	{
