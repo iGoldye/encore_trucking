@@ -15,10 +15,6 @@ You can control almost everything about the script using the `config.lua` file. 
 
 Support for specific framework integrations is not provided. If you need general support, or have found a bug, feel free to open an issue or submit a pull request.
 
-## Known Bugs
-
-- Sometimes the yellow blips aren't correctly cleared from the map.
-
 ## License
 
 encore_trucking is licensed under the MIT license. See [README.md](README.md) for more details.
