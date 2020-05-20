@@ -17,4 +17,4 @@ Support for specific framework integrations is not provided. If you need general
 
 ## License
 
-encore_trucking is licensed under the MIT license. See [README.md](README.md) for more details.
+encore_trucking is licensed under the MIT license. See [LICENSE.md](LICENSE.md) for more details.
