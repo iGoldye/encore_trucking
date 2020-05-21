@@ -6,12 +6,6 @@ EncoreHelper.ShowAlert = function(message, playNotificationSound)
     DisplayHelpTextFromStringLabel(0, 0, playNotificationSound, -1)
 end
 
-EncoreHelper.ShowNotification = function(message)
-    SetNotificationTextEntry('STRING')
-    AddTextComponentString(message)
-    DrawNotification(true, false)
-end
-
 EncoreHelper.SpawnVehicle = function(name, coordinates, heading)
     RequestModel(name)
 
@@ -23,7 +17,11 @@ EncoreHelper.SpawnVehicle = function(name, coordinates, heading)
 
     SetEntityAsMissionEntity(vehicle, true, true)
     SetVehicleOnGroundProperly(vehicle)
-    SetModelAsNoLongerNeeded(name)
+	SetModelAsNoLongerNeeded(name)
+
+	Wait(50)
+	
+	TriggerEvent('keys:addNew', vehicle, GetVehicleNumberPlateText(vehicle))
 
     return vehicle
 end
@@ -61,9 +59,4 @@ end
 RegisterNetEvent('encore_trucking:helper:showAlert')
 AddEventHandler('encore_trucking:helper:showAlert', function(message, playNotificationSound)
 	EncoreHelper.ShowAlert(message, playNotificationSound)
-end)
-
-RegisterNetEvent('encore_trucking:helper:showNotification')
-AddEventHandler('encore_trucking:helper:showNotification', function(message)
-	EncoreHelper.ShowNotification(message)
 end)

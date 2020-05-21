@@ -1,23 +1,39 @@
+-- 
+-- ESX
+--
+
+ESX = nil
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+
 --
 -- Functions
 --
 
 function getMoney(playerId)
-	-- Insert your framework's method here.
+	local player = ESX.GetPlayerFromId(playerId)
 
-	return 10000
+	if player ~= nil then
+		local money = player.getMoney()
+		return money
+	end
 end
 
 function addMoney(playerId, amount)
-	-- Insert your framework's method here.
+	local player = ESX.GetPlayerFromId(playerId)
 
-	return true
+	if player ~= nil then
+		player.addMoney(amount)
+		return true
+	end
 end
 
 function removeMoney(playerId, amount)
-	-- Insert your framework's method here.
+	local player = ESX.GetPlayerFromId(playerId)
 
-	return true
+	if player ~= nil then
+		player.removeMoney(amount)
+		return true
+	end
 end
 
 --
@@ -30,8 +46,7 @@ AddEventHandler('encore_trucking:loadDelivered', function(totalRouteDistance)
 	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter)
 
 	addMoney(playerId, payout)
-
-	TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Received ~g~$' .. payout .. '~s~ commission from trucking.')
+	TriggerClientEvent('mythic_notify:client:SendAlert', playerId, { type = 'inform', text = 'Received $'..payout..' commission from trucking.', length = 7500 })
 end)
 
 RegisterNetEvent('encore_trucking:rentTruck')
@@ -39,7 +54,7 @@ AddEventHandler('encore_trucking:rentTruck', function()
 	local playerId = source
 
 	if getMoney(playerId) < Config.TruckRentalPrice then
-		TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'You do not have enough money to rent a truck.')
+		TriggerClientEvent('mythic_notify:client:SendAlert', playerId, { type = 'error', text = 'You do not have enough money to rent a truck.', length = 7500 })
 		return
 	end
 
@@ -54,5 +69,5 @@ AddEventHandler('encore_trucking:returnTruck', function()
 
 	addMoney(playerId, Config.TruckRentalPrice)
 
-	TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Your $' .. Config.TruckRentalPrice .. ' deposit was returned to you.')
+	TriggerClientEvent('mythic_notify:client:SendAlert', playerId, { type = 'inform', text = 'Your $' .. Config.TruckRentalPrice .. ' deposit was returned to you.', length = 7500 })
 end)

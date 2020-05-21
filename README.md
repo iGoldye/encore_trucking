@@ -1,3 +1,7 @@
+## Framework
+
+This version already has ESX built in, alongside mythic_notify.
+
 # encore_trucking
 A simple framework-agnostic FiveM trucking script built for [Encore RP](http://discord.encorerp.com). Players rent a semi-truck and then perform various deliveries ranging from automobile deliveries to PDM, logging deliveries, fuel deliveries, etc.
 

@@ -1,11 +1,5 @@
-local truckId      	        = nil
-local jobStatus    		    = CONST_NOTWORKING
-local currentRoute          = nil
-local currentDestination    = nil
-local routeBlip             = nil
-local trailerId             = nil
-local lastDropCoordinates   = nil
-local totalRouteDistance    = nil
+local truckId, jobStatus, currentRoute, currentDestination = nil, CONST_NOTWORKING, nil, nil
+local currentDestination, routeBlip, trailerId, lastDropCoordinates, totalRouteDistance = nil, nil, nil, nil, nil, nil
 
 --
 -- Threads
@@ -79,8 +73,7 @@ function pickingUpThread(playerId, playerCoordinates)
 		RemoveBlip(routeBlip)
 		EncoreHelper.CreateRouteBlip(currentDestination)
 
-		EncoreHelper.ShowNotification('Take the delivery to the ~y~drop off point~s~.')
-
+		exports['mythic_notify']:SendAlert('inform', 'Take the delivery to the drop off point.', 7500)
 		jobStatus = CONST_DELIVERING
 	end
 end
@@ -112,7 +105,7 @@ function deliveringThread(playerId, playerCoordinates)
 		currentDestination  = nil
 		lastDropCoordinates = playerCoordinates
 
-		EncoreHelper.ShowNotification('You lost your load. A new route will be assigned.')
+		exports['mythic_notify']:SendAlert('inform', 'You lost your load. A new route will be assigned.', 7500)
 
 		jobStatus = CONST_WAITINGFORTASK
 	end
@@ -176,8 +169,7 @@ function assignTask()
 	totalRouteDistance  = distanceToPickup + distanceToDelivery
 	lastDropCoordinates = currentDestination
 
-	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS.')
-
+	exports['mythic_notify']:SendAlert('inform', 'Head to the <b>pickup</b> on your GPS.', 7500)
 	jobStatus = CONST_PICKINGUP
 end
 
