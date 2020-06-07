@@ -43,7 +43,7 @@ end
 RegisterNetEvent('encore_trucking:loadDelivered')
 AddEventHandler('encore_trucking:loadDelivered', function(totalRouteDistance)
 	local playerId = source
-	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter)
+	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter) / 2
 
 	addMoney(playerId, payout)
 	TriggerClientEvent('mythic_notify:client:SendAlert', playerId, { type = 'inform', text = 'Received $'..payout..' commission from trucking.', length = 7500 })
