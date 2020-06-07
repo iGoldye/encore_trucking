@@ -1,6 +1,8 @@
 local truckId, jobStatus, currentRoute, currentDestination = nil, CONST_NOTWORKING, nil, nil
 local currentDestination, routeBlip, trailerId, lastDropCoordinates, totalRouteDistance = nil, nil, nil, nil, nil, nil
 
+local PickupCoordinates = nil
+
 --
 -- Threads
 --
@@ -54,7 +56,24 @@ Citizen.CreateThread(function()
 		
 			-- Abort Hotkey
 			if IsControlJustReleased(0, Config.AbortKey) then
-				abortJob()
+				exports['mythic_notify']:SendAlert('inform', 'Press X again to confirm abort job.', 5000)
+				local time = 5000
+
+				while true do
+					Wait(0)
+
+					if IsControlJustReleased(0, Config.AbortKey) then
+						abortJob()
+						break
+					else
+						time = time - 1
+						
+						if time <= 0 then
+							exports['mythic_notify']:SendAlert('inform', 'You chose not to abort job.', 5000)
+							break
+						end
+					end
+				end
 			end
 		end
 
@@ -65,16 +84,36 @@ Citizen.CreateThread(function()
 end)
 
 function pickingUpThread(playerId, playerCoordinates)
-	if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentRoute.PickupCoordinates, true) < 100.0 then
-		trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentRoute.PickupCoordinates, currentRoute.PickupHeading)
-	end
+	if currentRoute ~= nil then
+		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentRoute.PickupCoordinates, true) < 100.0 then
+			exports['mythic_notify']:PersistentAlert('START', 'TRUCKING', 'inform', 'Press [E] to spawn the trailer!')
 
-	if trailerId and IsEntityAttachedToEntity(trailerId, truckId) then
-		RemoveBlip(routeBlip)
-		EncoreHelper.CreateRouteBlip(currentDestination)
+			--Citizen.CreateThread(function()
+				while true do
+					Wait(0)
+			
+					if currentRoute ~= nil and not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentRoute.PickupCoordinates, true) < 100.0 then
+						if IsControlJustReleased(0, 38) or IsControlJustReleased(1, 46) or IsControlJustReleased(1, 86) or IsControlJustReleased(0, 20) then
+							exports['mythic_notify']:PersistentAlert('END', 'TRUCKING')
+							trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentRoute.PickupCoordinates, currentRoute.PickupHeading)
+							break
+						end
+					else
+						exports['mythic_notify']:PersistentAlert('END', 'TRUCKING')
+						break
+					end
+				end
+			--end)
+		end
 
-		exports['mythic_notify']:SendAlert('inform', 'Take the delivery to the drop off point.', 7500)
-		jobStatus = CONST_DELIVERING
+		if trailerId and IsEntityAttachedToEntity(trailerId, truckId) then
+			RemoveBlip(routeBlip)
+			Wait(100)
+			EncoreHelper.CreateRouteBlip(currentDestination)
+
+			exports['mythic_notify']:SendAlert('inform', 'Take the delivery to the drop off point.', 7500)
+			jobStatus = CONST_DELIVERING
+		end
 	end
 end
 
@@ -182,8 +221,8 @@ AddEventHandler('encore_trucking:startJob', function()
 	local playerId = PlayerPedId()
 
 	truckId = EncoreHelper.SpawnVehicle(Config.TruckModel, Config.JobStart.Coordinates, Config.JobStart.Heading)
-
 	SetPedIntoVehicle(playerId, truckId, -1)
+	
 
 	lastDropCoordinates = Config.JobStart.Coordinates
 
